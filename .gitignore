@@ -1,0 +1,18 @@
+# Only track light demo apps; ignore the rest of the SDK for now
+/*
+!.gitignore
+!/software/
+/software/*
+!/software/TuyaOS/
+/software/TuyaOS/*
+!/software/TuyaOS/apps/
+/software/TuyaOS/apps/*
+!/software/TuyaOS/apps/tuyaos_demo_light_3/
+!/software/TuyaOS/apps/tuyaos_demo_light_31/
+!/software/TuyaOS/apps/tuyaos_demo_light_3_test1/
+!/software/TuyaOS/apps/tuyaos_demo_light_4/
+!/software/TuyaOS/apps/tuyaos_demo_light_5_flash/
+!/software/TuyaOS/apps/tuyaos_demo_light_5_new/
+
+# Build artifacts
+**/output/
