@@ -1,6 +1,7 @@
 # Only track light demo apps; ignore the rest of the SDK for now
 /*
 !.gitignore
+!/archive/
 !/software/
 /software/*
 !/software/TuyaOS/
