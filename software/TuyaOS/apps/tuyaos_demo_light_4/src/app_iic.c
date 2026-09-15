@@ -466,6 +466,8 @@ static uint8_t get_current_aux_brightness(void)
 static void handle_gesture(uint16_t ps_val)
 {
     extern DEMO_INFO_T sg_demo_info;
+    extern BOOL_T sg_sleep_is_timing;
+    extern BOOL_T sg_wake_is_timing;
     uint32_t current_time = tal_system_get_millisecond();
 
     /* 上电保护：灯刚亮/PWM未稳定时不处理手势 */
@@ -527,7 +529,7 @@ static void handle_gesture(uint16_t ps_val)
     {
         tkl_log_output("hand_in ps value = %d, threshold = %d, cal value = %d\r\n",ps_val,g_threshold,g_baseline);
         uint32_t hold_time = current_time - g_hand_in_time;
-
+        app_light_schedule_user_interrupt_sleep_wake();
         // if (ps_val > g_ps_peak)
         //     g_ps_peak = ps_val;
 
@@ -672,7 +674,6 @@ static void handle_gesture(uint16_t ps_val)
             tkl_log_output("hand_out ps value = %d, threshold = %d, cal value = %d\r\n",ps_val,g_threshold,g_baseline);
             g_last_gesture_time = current_time;
             beep_once();
-
             if (sg_demo_info.white_switch ||
                 sg_demo_info.aux_switch)
             {
