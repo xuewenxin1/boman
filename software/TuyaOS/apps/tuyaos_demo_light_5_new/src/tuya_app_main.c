@@ -230,7 +230,6 @@ STATIC VOID_T __soc_dev_reset_inform_cb(GW_RESET_TYPE_E type)
     {
         sg_demo_info.first_network = 0;
         device_config_save1_force();
-        tuya_iot_wf_gw_unactive();
     }
     else if (type == GW_REMOTE_RESET_FACTORY)
     {
@@ -285,10 +284,13 @@ STATIC OPERATE_RET __soc_dev_net_status_cb(VOID *data)
     extern DEMO_INFO_T sg_demo_info;
     if (tuya_svc_netmgr_linkage_is_up(LINKAGE_TYPE_DEFAULT))
     {
+        TAL_PR_NOTICE("upload_device_all_status1\r\n");
         if (get_mqc_conn_stat())
         {
+            TAL_PR_NOTICE("upload_device_all_status2.%d\r\n",s_syn_all_status);
             if (FALSE == s_syn_all_status)
             {
+                TAL_PR_NOTICE("upload_device_all_status3\r\n");
                 upload_device_all_status();
                 s_syn_all_status = TRUE;
             }

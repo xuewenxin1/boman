@@ -50,7 +50,7 @@ extern "C" {
 #define SMART_NIGHT_LIGHT         111
 
 // #define DPID_PREVIEW              120
-#define OBJ_DP_NUM_MAX            40
+#define OBJ_DP_NUM_MAX            13
 // #define POWER_MEMORY_RAW_LEN      12
 #pragma pack(push, 1)
 typedef struct {

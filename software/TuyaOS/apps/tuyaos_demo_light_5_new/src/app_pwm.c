@@ -202,7 +202,7 @@ VOID app_pwm()
                     uint16_t aux_ww = aux_bright1 * aux_temp1;
                     uint16_t aux_cw = aux_bright1 * 100 - aux_ww;
                     light_pwm_clamp_mix(&aux_ww, &aux_cw);
-all_channels[channel_count] = AUX_BRIGHT_PWM;
+                    all_channels[channel_count] = AUX_BRIGHT_PWM;
                     all_duties[channel_count++] = aux_ww;
                     
                     all_channels[channel_count] = AUX_TEMP_PWM;
@@ -263,7 +263,7 @@ all_channels[channel_count] = AUX_BRIGHT_PWM;
                     uint16_t ww = white_bright1 * white_temp1;
                     uint16_t cw = white_bright1 * 100 - ww;
                     light_pwm_clamp_mix(&ww, &cw);
-all_channels[channel_count] = BRIGHT_PWM;
+                    all_channels[channel_count] = BRIGHT_PWM;
                     all_duties[channel_count++] = ww;
                     
                     all_channels[channel_count] = TEMP_PWM;
