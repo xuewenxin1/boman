@@ -1485,16 +1485,14 @@ VOID upload_device_all_status(VOID_T)
     p_obj_dp++;
     p_obj_dp->dpid = RHYTHM_STATUS;
     p_obj_dp->type = PROP_BOOL;
-    {
-        extern bool sg_rhythm_interrupted;
-        p_obj_dp->value.dp_bool = sg_rhythm_interrupted ? 1 : 0;
-    }
+    p_obj_dp->value.dp_bool = 0;
 
     p_obj_dp++;
     p_obj_dp->dpid = RHYTHM_SWITCH;
     p_obj_dp->type = PROP_BOOL;
     p_obj_dp->value.dp_bool = sg_demo_info.rhythm_switch;
 
+    TAL_PR_NOTICE("upload_device_all_status4\r\n");
     TUYA_CALL_ERR_LOG(dev_report_dp_json_async(NULL, p_all_obj_dp, OBJ_DP_NUM_MAX));
 
     tal_free(p_all_obj_dp);
@@ -1605,7 +1603,7 @@ typedef struct {
 static DEMO_FLASH_OP_T sg_demo_flash_op = {0};
 
 /* ================== 三块定义 ================== */
-#define BLOCK_AB_SIZE (8192)  /* A/B 各 8KB，减少换块擦除次数 */
+#define BLOCK_AB_SIZE (4096)  /* A/B 各 8KB，减少换块擦除次数 */
 #define BLOCK_C_SIZE  (4096)  /* C 保持 4KB */
 #define BLOCK_A       (sg_demo_start_addr)
 #define BLOCK_B       (sg_demo_start_addr + BLOCK_AB_SIZE)
