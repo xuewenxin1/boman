@@ -333,11 +333,9 @@ VOID app_light_schedule_before_wake_start(VOID_T)
 VOID app_light_schedule_before_rhythm_start(VOID_T)
 {
     if (sg_sleep_is_timing || sleep_state) {
-        TAL_PR_NOTICE("节律启动/到新节点，完全停止运行中的伴眠");
         app_light_preempt_sleep_today();
     }
     if (sg_wake_is_timing) {
-        TAL_PR_NOTICE("节律启动/到新节点，完全停止运行中的唤醒");
         app_light_preempt_wake_today();
     }
     app_light_schedule_on_started(SCHEDULE_EVT_RHYTHM);

@@ -428,7 +428,7 @@ static VOID __wake_apply_minimum_start(VOID_T)
     wake_aux_bright = 1;
     wake_temp = 0;
 
-    TAL_PR_NOTICE("唤醒从最低亮度1%%开始");
+    // TAL_PR_NOTICE("唤醒从最低亮度1%%开始");
 
     if (info.main_switch) {
         sg_demo_info.white_bright = 1;
@@ -590,7 +590,7 @@ static VOID __wake_start_timer_cb(PVOID_T pTimerArg)
     }
 
     if (app_light_schedule_should_skip_wake_at_trigger()) {
-        TAL_PR_NOTICE("唤醒到点但与伴眠同时间，伴眠优先，跳过唤醒");
+        // TAL_PR_NOTICE("唤醒到点但与伴眠同时间，伴眠优先，跳过唤醒");
         if (info.week == WEEK_ONCE) {
             info.enable = 0;
             sg_demo_info.wake_init[0] = 0x0;
@@ -601,7 +601,7 @@ static VOID __wake_start_timer_cb(PVOID_T pTimerArg)
     }
 
     if (app_light_tm_sleep_is_timing() || sleep_state) {
-        TAL_PR_NOTICE("唤醒到点，完全停止运行中的伴眠");
+        // TAL_PR_NOTICE("唤醒到点，完全停止运行中的伴眠");
         app_light_preempt_sleep_today();
     }
 
@@ -704,7 +704,7 @@ OPERATE_RET app_light_start_wake_timer()
     {
         app_light_schedule_preempt_for_new_event(SCHEDULE_EVT_WAKE, TRUE);
         if (app_light_tm_sleep_is_timing() || sleep_state) {
-            TAL_PR_NOTICE("唤醒立即启动，完全停止运行中的伴眠");
+            // TAL_PR_NOTICE("唤醒立即启动，完全停止运行中的伴眠");
             app_light_preempt_sleep_today();
         }
 
@@ -750,12 +750,12 @@ VOID app_light_preempt_wake_today(VOID_T)
         sg_demo_info.wake_init[0] = 0x0;
         app_light_schedule_clear_wake_preempt();
         dev_report_dp_raw_sync(NULL, WAKEUP_MODE, sg_demo_info.wake_init, 11, 5);
-        TAL_PR_NOTICE("唤醒被抢占，当天完全停止");
+        // TAL_PR_NOTICE("唤醒被抢占，当天完全停止");
         return;
     }
 
     app_light_schedule_mark_wake_preempted_today();
-    TAL_PR_NOTICE("唤醒被抢占，当天完全停止，下一周期日再执行");
+    // TAL_PR_NOTICE("唤醒被抢占，当天完全停止，下一周期日再执行");
 
     if (info.enable && info.start_time_en == 1) {
         __wake_timer_restart(0, APP_LIGHT_SCHEDULE_POLL_MS);

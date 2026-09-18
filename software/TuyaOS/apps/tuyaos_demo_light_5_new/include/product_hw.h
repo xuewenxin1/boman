@@ -16,7 +16,7 @@
 
 /* ★ 改机型只改这里 */
 #ifndef LIGHT_HW_SHAPE
-#define LIGHT_HW_SHAPE   LIGHT_HW_ARC
+#define LIGHT_HW_SHAPE   LIGHT_HW_SQUARE
 #endif
 
 #if (LIGHT_HW_SHAPE == LIGHT_HW_SQUARE)

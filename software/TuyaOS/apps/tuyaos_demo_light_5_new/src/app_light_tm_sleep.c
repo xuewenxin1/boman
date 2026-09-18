@@ -559,12 +559,12 @@ static VOID __sleep_prepare_start_brightness(VOID_T)
         sg_sleep_run_info.aux_on = sg_demo_info.aux_switch;
         sg_sleep_run_info.night_on = sg_demo_info.night_switch;
 
-        TAL_PR_NOTICE("伴眠从当前亮度开始: 主%u 辅%u 夜%u 色温%u",
-                      main_bright, aux_bright, night_bright, current_temp);
+        // TAL_PR_NOTICE("伴眠从当前亮度开始: 主%u 辅%u 夜%u 色温%u",
+        //               main_bright, aux_bright, night_bright, current_temp);
     } else {
-        TAL_PR_NOTICE("伴眠从自定义亮度开始: 主%u%% 辅%u%% 夜%u%% 色温%u",
-                      sg_sleep_run_info.main_percent, sg_sleep_run_info.aux_percent,
-                      sg_sleep_run_info.night_percent, sg_sleep_run_info.temper);
+        // TAL_PR_NOTICE("伴眠从自定义亮度开始: 主%u%% 辅%u%% 夜%u%% 色温%u",
+        //               sg_sleep_run_info.main_percent, sg_sleep_run_info.aux_percent,
+        //               sg_sleep_run_info.night_percent, sg_sleep_run_info.temper);
         __sleep_apply_custom_start_pwm();
     }
 }
@@ -647,7 +647,7 @@ static VOID __sleep_start_timer_cb(PVOID_T pTimerArg)
     }
 
     if (app_light_wake_is_timing()) {
-        TAL_PR_NOTICE("伴眠到点，完全停止运行中的唤醒");
+        // TAL_PR_NOTICE("伴眠到点，完全停止运行中的唤醒");
         app_light_preempt_wake_today();
     }
 
@@ -760,7 +760,7 @@ OPERATE_RET app_light_start_sleep_timer()
     {
         app_light_schedule_preempt_for_new_event(SCHEDULE_EVT_SLEEP, TRUE);
         if (app_light_wake_is_timing()) {
-            TAL_PR_NOTICE("伴眠立即启动，完全停止运行中的唤醒");
+            // TAL_PR_NOTICE("伴眠立即启动，完全停止运行中的唤醒");
             app_light_preempt_wake_today();
         }
 
@@ -809,12 +809,12 @@ VOID app_light_preempt_sleep_today(VOID_T)
         sg_demo_info.sleep_init[0] = 0x0;
         app_light_schedule_clear_sleep_preempt();
         dev_report_dp_raw_sync(NULL, SLEEP_MODE, sg_demo_info.sleep_init, 15, 5);
-        TAL_PR_NOTICE("伴眠被抢占，当天完全停止");
+        // TAL_PR_NOTICE("伴眠被抢占，当天完全停止");
         return;
     }
 
     app_light_schedule_mark_sleep_preempted_today();
-    TAL_PR_NOTICE("伴眠被抢占，当天完全停止，下一周期日再执行");
+    // TAL_PR_NOTICE("伴眠被抢占，当天完全停止，下一周期日再执行");
 
     if (sg_sleep_run_info.enable && sg_sleep_run_info.start_mode == 1) {
         __sleep_timer_restart(0, APP_LIGHT_SCHEDULE_POLL_MS);

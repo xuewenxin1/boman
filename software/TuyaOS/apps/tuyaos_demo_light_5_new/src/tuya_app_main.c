@@ -85,12 +85,6 @@ extern void tuya_ble_enable_debug(bool enable);
 STATIC THREAD_HANDLE ty_app_thread = NULL;
 STATIC UINT32_T sg_boot_t0_ms = 0;
 
-STATIC VOID boot_ms_print(CONST CHAR_T *tag)
-{
-    (VOID)tag;
-    /* 量产屏蔽启动耗时打印 */
-}
-
 /***********************************************************
 ***********************function define**********************
 ***********************************************************/
@@ -284,13 +278,10 @@ STATIC OPERATE_RET __soc_dev_net_status_cb(VOID *data)
     extern DEMO_INFO_T sg_demo_info;
     if (tuya_svc_netmgr_linkage_is_up(LINKAGE_TYPE_DEFAULT))
     {
-        TAL_PR_NOTICE("upload_device_all_status1\r\n");
         if (get_mqc_conn_stat())
         {
-            TAL_PR_NOTICE("upload_device_all_status2.%d\r\n",s_syn_all_status);
             if (FALSE == s_syn_all_status)
             {
-                TAL_PR_NOTICE("upload_device_all_status3\r\n");
                 upload_device_all_status();
                 s_syn_all_status = TRUE;
             }
@@ -441,7 +432,6 @@ uint16_t gradual_time_ms = 1600;
 uint8_t calibration = 0;
 OPERATE_RET ty_app_light_start1(VOID *data)
 {
-    boot_ms_print("app: ty_app_light_start1 enter");
     app_time_service();
     extern DEMO_INFO_T sg_demo_info;
     // tkl_flash_erase(0x1EF000, 2 * 1024);
@@ -452,19 +442,15 @@ OPERATE_RET ty_app_light_start1(VOID *data)
         else
             gradual_time_ms = 1600;
     }
-    boot_ms_print("app: device_config_load done");
     // #if load_calibration
         Load_calibration();
     // #endif
     if (!(is_product_test_active())) {
         calibration = system_init();
-        boot_ms_print("app: system_init done");
         if(calibration == 1) {
             test_gpio1();
         }
-        boot_ms_print("app: test_gpio1/light on done");
     }
-    boot_ms_print("app: ty_app_light_start1 exit");
     return OPRT_OK;
 }
 
@@ -472,8 +458,6 @@ OPERATE_RET __soc_device_init(VOID_T)
 {
     OPERATE_RET rt = OPRT_OK;
     extern DEMO_INFO_T sg_demo_info;
-
-    boot_ms_print("app: __soc_device_init enter");
 
     ty_subscribe_event(EVENT_LINK_UP, "quickstart", __soc_dev_net_status_cb, SUBSCRIBE_TYPE_NORMAL);
     ty_subscribe_event(EVENT_LINK_DOWN, "quickstart", __soc_dev_net_status_cb, SUBSCRIBE_TYPE_NORMAL);
@@ -546,13 +530,11 @@ OPERATE_RET __soc_device_init(VOID_T)
 #ifdef ENABLE_BT_SERVICE
     tuya_ble_enable_debug(false);
 #endif
-    boot_ms_print("app: wifi/soc init done");
     if(calibration == 1){//&&sg_demo_info.calibration == 1
         tuya_iot_reg_get_wf_nw_stat_cb(ty_app_wf_nw_stat_cb);
-        user_ble_remote();
+        
         example_product_test();
         test_gpio();
-        boot_ms_print("app: test_gpio done");
         
         app_light_on();
         app_mode_init();
@@ -562,9 +544,7 @@ OPERATE_RET __soc_device_init(VOID_T)
         app_light_wake_init();
         app_light_countdown_module_init();
         device_config_save1();
-        boot_ms_print("app: light/mode/rhythm/save done");
     }
-    boot_ms_print("app: __soc_device_init exit");
     
     return 0;
 }
@@ -573,7 +553,6 @@ STATIC VOID_T user_main(VOID_T)
 {
     OPERATE_RET rt = OPRT_OK;
 
-    boot_ms_print("app: user_main enter");
     tuya_base_utilities_init();
     ty_subscribe_event(EVENT_SDK_EARLY_INIT_OK, "start", ty_app_light_start1, SUBSCRIBE_TYPE_NORMAL);
     /*pwm init — 5 路含 AUX */
@@ -587,12 +566,10 @@ STATIC VOID_T user_main(VOID_T)
     tkl_pwm_init(AUX_BRIGHT_PWM, &pwm_cfg1);
     tkl_pwm_init(AUX_TEMP_PWM, &pwm_cfg1);
     tkl_pwm_init(NIGHT_BRIGHT_PWM, &pwm_cfg1);
-    boot_ms_print("app: pwm init done");
     /* Initialization, because DB initialization takes a long time,
      * which affects the startup efficiency of some devices,
      * so special processing is performed during initialization to delay initialization of DB
      */
-    boot_ms_print("sdk: tuya_iot_init_params begin");
 #if OPERATING_SYSTEM == SYSTEM_LINUX
     rt = system("mkdir -p ./tuya_db_files/");
     TUYA_CALL_ERR_LOG(tuya_iot_init_params("./tuya_db_files/", NULL));
@@ -608,12 +585,10 @@ STATIC VOID_T user_main(VOID_T)
     tal_log_set_manage_attr(TAL_LOG_LEVEL_NOTICE);
     // KV flash 数据存储模块初始化
     tuya_iot_kv_flash_init(NULL);
-    boot_ms_print("sdk: tuya_iot_init/kv done");
 
     /* Initialization device */
-    
+    user_ble_remote();
     TUYA_CALL_ERR_LOG(__soc_device_init());
-    boot_ms_print("app: user_main exit");
 
     return;
 }
@@ -626,15 +601,12 @@ STATIC VOID_T user_main(VOID_T)
  */
 STATIC VOID_T tuya_app_thread(VOID_T *arg)
 {
-    boot_ms_print("sdk: tuya_app_thread enter");
     /* Initialization LWIP first!!! */
 #if defined(ENABLE_LWIP) && (ENABLE_LWIP == 1)
     TUYA_LwIP_Init();
-    boot_ms_print("sdk: LwIP_Init done");
 #endif
 
     user_main();
-    boot_ms_print("sdk: tuya_app_thread exit");
 
     tal_thread_delete(ty_app_thread);
     ty_app_thread = NULL;
@@ -657,10 +629,8 @@ VOID_T tuya_app_main(VOID)
     if (sg_boot_t0_ms == 0) {
         sg_boot_t0_ms = 1;
     }
-    /* tkl_log_output("[BOOT] tuya_app_main called ..."); 量产屏蔽 */
     THREAD_CFG_T thrd_param = {4096, 4, "tuya_app_main"};
     tal_thread_create_and_start(&ty_app_thread, NULL, NULL, tuya_app_thread, NULL, &thrd_param);
-    boot_ms_print("sdk: tuya_app_main thread created");
 #if OPERATING_SYSTEM == SYSTEM_LINUX
     while (1)
     {

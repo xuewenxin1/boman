@@ -98,15 +98,15 @@ VOID app_pwm()
         // 每次切档都是在当前记忆档位基础上+1
         uint8_t mode_index = (sg_demo_info.gear_memory + 1) % switch_change;
         current_mode_index = enabled_modes[mode_index];
-        TAL_PR_NOTICE("gear switch: cnt1=%d mem %d->%d mode=%d n=%d\r\n",
-                      sg_demo_info.cnt1, sg_demo_info.gear_memory,
-                      mode_index, current_mode_index, switch_change);
+        // TAL_PR_NOTICE("gear switch: cnt1=%d mem %d->%d mode=%d n=%d\r\n",
+        //               sg_demo_info.cnt1, sg_demo_info.gear_memory,
+        //               mode_index, current_mode_index, switch_change);
         sg_demo_info.gear_memory = mode_index;
     } else if (sg_demo_info.cnt1 >= 2) {
         /* 总开关开了但子档全关：无法切档，至少按记忆出光，避免 current_mode=0 空切 */
-        TAL_PR_NOTICE("gear skip: cnt1=%d en0=%d n=%d, restore light\r\n",
-                      sg_demo_info.cnt1, sg_demo_info.switch_change_gear[0],
-                      switch_change);
+        // TAL_PR_NOTICE("gear skip: cnt1=%d en0=%d n=%d, restore light\r\n",
+        //               sg_demo_info.cnt1, sg_demo_info.switch_change_gear[0],
+        //               switch_change);
         sg_demo_info.cnt1 = 1;
     }
     TAL_PR_NOTICE("sg_demo_info.calibration = %d\r\n",sg_demo_info.calibration);
@@ -294,7 +294,7 @@ VOID app_pwm()
                     uint16_t aux_ww = aux_bright1 * aux_temp1;
                     uint16_t aux_cw = aux_bright1 * 100 - aux_ww;
                     light_pwm_clamp_mix(&aux_ww, &aux_cw);
-all_channels[channel_count] = AUX_BRIGHT_PWM;
+                    all_channels[channel_count] = AUX_BRIGHT_PWM;
                     all_duties[channel_count++] = aux_ww;
                     
                     all_channels[channel_count] = AUX_TEMP_PWM;
@@ -352,7 +352,7 @@ all_channels[channel_count] = AUX_BRIGHT_PWM;
                     uint16_t ww = white_bright1 * white_temp1;
                     uint16_t cw = white_bright1 * 100 - ww;
                     light_pwm_clamp_mix(&ww, &cw);
-all_channels[channel_count] = BRIGHT_PWM;
+                    all_channels[channel_count] = BRIGHT_PWM;
                     all_duties[channel_count++] = ww;
                     
                     all_channels[channel_count] = TEMP_PWM;
@@ -383,7 +383,7 @@ all_channels[channel_count] = BRIGHT_PWM;
                     uint16_t aux_ww = aux_bright1 * aux_temp1;
                     uint16_t aux_cw = aux_bright1 * 100 - aux_ww;
                     light_pwm_clamp_mix(&aux_ww, &aux_cw);
-all_channels[channel_count] = AUX_BRIGHT_PWM;
+                    all_channels[channel_count] = AUX_BRIGHT_PWM;
                     all_duties[channel_count++] = aux_ww;
                     
                     all_channels[channel_count] = AUX_TEMP_PWM;
@@ -429,7 +429,7 @@ all_channels[channel_count] = AUX_BRIGHT_PWM;
                 if (sg_demo_info.switch_change_gear[8] == 1)
                 {
                     sg_demo_info.white_switch = 1;
-                    sg_demo_info.switch_status = 1;
+                    // sg_demo_info.switch_status = 1;
                     sg_demo_info.white_bright = sg_demo_info.switch_change_gear[9];
                     sg_demo_info.white_temp = sg_demo_info.switch_change_gear[12];
                     uint16_t white_bright1 = 5 + (sg_demo_info.white_bright - 1) * 95 / 99;
@@ -442,7 +442,7 @@ all_channels[channel_count] = AUX_BRIGHT_PWM;
                     
                     all_channels[channel_count] = TEMP_PWM;
                     all_duties[channel_count++] = cw;
-                    upload_device_bool_status(DPID_SWITCH, 1);
+                    // upload_device_bool_status(DPID_SWITCH, 1);
                     upload_device_bool_status(LIGHT_SWITCH, 1);
                     upload_device_value_status(DPID_WHITE_BRIGHT, sg_demo_info.white_bright);
                     upload_device_value_status(DPID_TEMP_VALUE, sg_demo_info.white_temp);
@@ -460,7 +460,7 @@ all_channels[channel_count] = AUX_BRIGHT_PWM;
                 if (sg_demo_info.switch_change_gear[10] == 1)
                 {
                     sg_demo_info.aux_switch = 1;
-                    sg_demo_info.switch_status = 1;
+                    // sg_demo_info.switch_status = 1;
                     sg_demo_info.aux_bright = sg_demo_info.switch_change_gear[11];
                     sg_demo_info.white_temp = sg_demo_info.switch_change_gear[12];
                     uint16_t aux_bright1 = 5 + (sg_demo_info.aux_bright - 1) * 95 / 99;
@@ -468,12 +468,12 @@ all_channels[channel_count] = AUX_BRIGHT_PWM;
                     uint16_t aux_ww = aux_bright1 * aux_temp1;
                     uint16_t aux_cw = aux_bright1 * 100 - aux_ww;
                     light_pwm_clamp_mix(&aux_ww, &aux_cw);
-all_channels[channel_count] = AUX_BRIGHT_PWM;
+                    all_channels[channel_count] = AUX_BRIGHT_PWM;
                     all_duties[channel_count++] = aux_ww;
                     
                     all_channels[channel_count] = AUX_TEMP_PWM;
                     all_duties[channel_count++] = aux_cw;
-                    upload_device_bool_status(DPID_SWITCH, 1);
+                    // upload_device_bool_status(DPID_SWITCH, 1);
                     upload_device_bool_status(AUX_SWITCH, 1);
                     upload_device_value_status(DPID_AUX_BRIGHT_VALUE, sg_demo_info.aux_bright);
                     upload_device_value_status(DPID_TEMP_VALUE, sg_demo_info.white_temp);
@@ -489,7 +489,7 @@ all_channels[channel_count] = AUX_BRIGHT_PWM;
                     all_duties[channel_count++] = 0;
                 }
                 sg_demo_info.switch_status =
-                    (sg_demo_info.white_switch || sg_demo_info.aux_switch) ? 1 : 0;
+                    (sg_demo_info.white_switch || sg_demo_info.aux_switch || sg_demo_info.night_switch) ? 1 : 0;
                 if (sg_demo_info.white_switch && sg_demo_info.aux_switch)
                     sg_demo_info.last_light_memory = 1;
                 else if (sg_demo_info.white_switch)
@@ -553,7 +553,7 @@ all_channels[channel_count] = AUX_BRIGHT_PWM;
                     uint16_t aux_ww = aux_bright1 * aux_temp1;
                     uint16_t aux_cw = aux_bright1 * 100 - aux_ww;
                     light_pwm_clamp_mix(&aux_ww, &aux_cw);
-all_channels[channel_count] = AUX_BRIGHT_PWM;
+                    all_channels[channel_count] = AUX_BRIGHT_PWM;
                     all_duties[channel_count++] = aux_ww;
                     
                     all_channels[channel_count] = AUX_TEMP_PWM;
@@ -613,7 +613,7 @@ all_channels[channel_count] = AUX_BRIGHT_PWM;
         device_config_save1();
     }
     else{
-        TAL_PR_NOTICE("night_switch\r\n");
+        // TAL_PR_NOTICE("night_switch\r\n");
         sg_demo_info.white_switch = 0;
         sg_demo_info.switch_status = 1;
         sg_demo_info.aux_switch = 0;

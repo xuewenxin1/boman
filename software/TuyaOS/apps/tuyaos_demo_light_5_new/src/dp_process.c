@@ -1492,7 +1492,6 @@ VOID upload_device_all_status(VOID_T)
     p_obj_dp->type = PROP_BOOL;
     p_obj_dp->value.dp_bool = sg_demo_info.rhythm_switch;
 
-    TAL_PR_NOTICE("upload_device_all_status4\r\n");
     TUYA_CALL_ERR_LOG(dev_report_dp_json_async(NULL, p_all_obj_dp, OBJ_DP_NUM_MAX));
 
     tal_free(p_all_obj_dp);
